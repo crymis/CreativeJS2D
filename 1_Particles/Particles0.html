@@ -1,27 +1,84 @@
 <!DOCTYPE HTML>
-<html lang="en"> 
-<meta charset="utf-8"> 
+<html lang="en">
+<meta charset="utf-8">
 	<head>
 	<title> Particles!</title>
-	<style type="text/css"> 
-		body { 
-			background-color:black; 
-			margin:0px; 
-			overflow : hidden; 
+	<style type="text/css">
+		body {
+			background-color:black;
+			margin:0px;
+			overflow : hidden;
 		}
-		</style> 
+		</style>
 	</head>
-	
+
 	<body>
 		<script>
+			const canvas = document.createElement('canvas');
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			document.body.appendChild(canvas);
+
+			const ctx = canvas.getContext('2d');
+			const particles = [];
+			let hue = 0;
+
+			const draw = () => {
+				// define particle settings
+				const particle = {
+					x: canvas.width / 2,
+					y: canvas.height / 2,
+					xVel: random(-5, 5),
+					yVel: random(-5, 5),
+					size: random(0, 10),
+					// randomize color with hue, saturation and lightness
+					color: `hsl(${hue}, 100%, 50%)`,
+				};
+
+				particles.push(particle);
+				// limit the max amount of particles visible at the same time
+				if (particles.length > 250) {
+					particles.shift();
+				}
+				// clear screen for moving rect instead of drawing line
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+				// rotate color by each drawing step
+				hue = (hue + 3) % 360;
+
+				particles.forEach(particle => {
+					// show new particle setting (position, size, color, etc)
+					ctx.fillStyle = particle.color;
+					ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+
+					// move particle further in direction
+					particle.x += particle.xVel;
+					particle.y += particle.yVel;
+
+					// bricking the new color assignment to change the "global" color
+					particle.color = 0;
+
+					// slow down velocity
+					particle.xVel = particle.xVel * 0.96;
+					particle.yVel = particle.yVel * 0.96;
+
+					//  shrink particle slowly
+					particle.size = particle.size * 0.98;
+				});
+			}
+
+			setInterval(draw, 1000/60); // 60 fps
 
 
 
+			// HELPERS
+			const random = (min, max) => {
+				return Math.random() * (max-min) + min;
+			}
 
 
-		</script>			
+		</script>
 	</body>
-	
-	
+
+
 </html>
-	
