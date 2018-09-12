@@ -3,31 +3,55 @@
 <head>
 <meta charset=utf-8>
 <title></title>
-<style type="text/css"> 
+<style type="text/css">
 	body {
 		background-color: #000000;
-		margin: 0px;	
+		margin: 0px;
 		text-align:center;
 	}
 
 </style>
 </head>
 <body>
-<script src="../libs/creative.js"></script>	
+<script src="../libs/creative.js"></script>
 <script>
 
 // canvas element and 2D context
 var canvas = document.createElement( 'canvas' ),
 	ctx = canvas.getContext( '2d' );
 
-canvas.width = 800; 
-canvas.height = 600; 
+canvas.width = 800;
+canvas.height = 600;
 document.body.appendChild(canvas);
 
 
+ctx.translate(400, 500);
 
+branch = (length, angle, event) => {
+	// ctx.translate(-400,-300);
+	// ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.save();
+	ctx.strokeStyle = 'white';
+	ctx.lineWidth = length / 10;
+	ctx.rotate(angle * Math.PI/180);
 
- 
+	ctx.beginPath();
+	ctx.moveTo(0,0);
+	ctx.lineTo(0, -length);
+	ctx.stroke();
+	ctx.translate(0, -length);
+	if (length > 10) {
+		branch(length * 0.7, event ? event.clientX : 20);
+		branch(length * 0.7, event ? -event.clientX : -20);
+	}
+	ctx.restore();
+}
+branch(100, 0);
+
+window.addEventListener('mousemove', e => {
+	branch(100, 0, e);
+});
+
 </script>
 </body>
 </html>

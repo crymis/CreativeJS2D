@@ -16,11 +16,11 @@
 	</head>
 	<body >
 
-	
-		<script src="js/ImageParticle.js"></script>	
+
+		<script src="js/ImageParticle.js"></script>
 		<script>
 
-window.addEventListener("load", setup); 
+window.addEventListener("load", setup);
 
 // screen size variables
 var	screenWidth = window.innerWidth,
@@ -30,103 +30,108 @@ var	screenWidth = window.innerWidth,
 	canvas = document.createElement( 'canvas' ),
 	context = canvas.getContext( '2d' ),
 
-	mouseX = screenWidth/2, 
-	mouseY = screenHeight/2, 
+	mouseX = screenWidth/2,
+	mouseY = screenHeight/2,
 	mouseDown = false,
 
 	particles = [],
 	maxParticles = 450,
-	particleImage = new Image(), 
+	particleImage = new Image(),
 	counter = 0;
-	
-particleImage.src = 'img/ParticleWhite2.png'; 
+
+particleImage.src = 'img/ParticleWhite2.png';
 
 function setup() {
 
 	// CANVAS SET UP
 
-	document.body.appendChild(canvas); 
-	canvas.width = screenWidth; 
+	document.body.appendChild(canvas);
+	canvas.width = screenWidth;
 	canvas.height = screenHeight;
 
-	initMouseListeners(); 
-	
+	initMouseListeners();
+
 	draw();
 
 }
 
 
-
+// let maxSmoke = 0;
 //
 
 function draw() {
 
 	// make some particles
 
-	makeParticle(1);		
-	
-	// clear the canvas
+	makeParticle(1);
 	context.clearRect(0,0, screenWidth, screenHeight);
-  	
-  	// iteratate through each particle
+
+	// clear the canvas
+	// if (maxSmoke >= 500) {
+	// 	context.clearRect(0,0, screenWidth, screenHeight);
+	// 	maxSmoke = 0;
+	// }
+	// maxSmoke++;
+
+	// iteratate through each particle
 	for (i=0; i<particles.length; i++) {
-		var particle = particles[i]; 
-		
+		var particle = particles[i];
+
 		// render it
-		particle.render(context); 
-		
+		particle.render(context);
+
 		// and then update. We always render first so particle
 		// appears in the starting point.
 		particle.update();
 
 	}
-	
-	// Keep taking the oldest particles away until we have 
-	// fewer than the maximum allowed. 
-	 
+
+	// Keep taking the oldest particles away until we have
+	// fewer than the maximum allowed.
+
 	while(particles.length>maxParticles)
-		particles.shift(); 
-	
-	
-	counter++; 
-	
+		particles.shift();
+
+
+	counter++;
+
 	window.requestAnimationFrame(draw);
 }
 
 function makeParticle(particleCount) {
 
 	for(var i=0; i<particleCount;i++) {
-		
+
 		// create a new particle in the middle of the stage
-		var particle = new ImageParticle(particleImage, mouseX, mouseY); 
-		
+		var particle = new ImageParticle(particleImage, mouseX, mouseY);
+
 		particle.velX = random(-0.25,0.25);
 		particle.velY = 0;
 		particle.size = random(0.1,0.2);
-		particle.maxSize = 10; 
+		particle.maxSize = 100;
 		particle.alpha = random(0.1,0.3);
-		particle.gravity = -0.08; 
+		particle.gravity = -0.15;
 		particle.drag = 0.97;
-		particle.shrink = random(1.01,1.02); 
-		particle.fade = 0.002; 
-		
+		particle.shrink = random(1.01,1.02);
+		particle.fade = 0.002;
+
 		particle.rotation = random(0,360);
-		particle.spin = random(-2,2); 
+		particle.spin = random(-2,2);
 		particle.compositeOperation = 'lighter';
 
-			
+
 		if(mouseDown) {
-			particle.size *= 2; 
+			particle.size *= 2;
 			particle.fade *= 0.8;
 		}
-		
+
 		// add it to the array
-		particles.push(particle); 
-		
+		particles.push(particle);
+
 	}
 
 }
-	
+
 function initMouseListeners() {
 	document.addEventListener('mousemove', onMouseMove, false);
 	document.addEventListener( 'mousedown', onMouseDown, false );
@@ -139,14 +144,14 @@ function onMouseMove( event ) {
 }
 
 function onMouseDown(event) {
-	mouseDown = true; 
+	mouseDown = true;
 }
 function onMouseUp(event) {
-	mouseDown = false; 
+	mouseDown = false;
 }
 
 function random(min, max) {
-	return ((Math.random()*(max-min)) + min); 
+	return ((Math.random()*(max-min)) + min);
 }
 
 

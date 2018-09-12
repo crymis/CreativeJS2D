@@ -33,11 +33,12 @@
 					size: random(0, 10),
 					// randomize color with hue, saturation and lightness
 					color: `hsl(${hue}, 100%, 50%)`,
+					opacity: 1,
 				};
 
 				particles.push(particle);
 				// limit the max amount of particles visible at the same time
-				if (particles.length > 250) {
+				if (particles.length > 500) {
 					particles.shift();
 				}
 				// clear screen for moving rect instead of drawing line
@@ -49,7 +50,7 @@
 				particles.forEach(particle => {
 					// show new particle setting (position, size, color, etc)
 					ctx.fillStyle = particle.color;
-					ctx.fillRect(particle.x, particle.y, particle.size, particle.size);
+					ctx.fillRect(particle.x, particle.y, particle.size, particle.size * 5);
 
 					// move particle further in direction
 					particle.x += particle.xVel;
