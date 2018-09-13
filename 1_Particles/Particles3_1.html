@@ -38,6 +38,7 @@ var	screenWidth = window.innerWidth,
 	maxParticles = 450,
 	particleImage = new Image(),
 	counter = 0;
+	progress = 0;
 
 particleImage.src = 'img/ParticleWhite2.png';
 
@@ -48,7 +49,6 @@ function setup() {
 	document.body.appendChild(canvas);
 	canvas.width = screenWidth;
 	canvas.height = screenHeight;
-
 	initMouseListeners();
 
 	draw();
@@ -60,11 +60,14 @@ function setup() {
 //
 
 function draw() {
+	progress++;
 
 	// make some particles
 
 	makeParticle(1);
-	context.clearRect(0,0, screenWidth, screenHeight);
+	// context.clearRect(0,0, screenWidth, screenHeight);
+	context.fillStyle = "rgba(0,0,0,0.08)";
+	context.fillRect(0,0, screenWidth, screenHeight);
 
 	// clear the canvas
 	// if (maxSmoke >= 500) {
@@ -76,6 +79,10 @@ function draw() {
 	// iteratate through each particle
 	for (i=0; i<particles.length; i++) {
 		var particle = particles[i];
+
+		particle.posX += Math.sin(progress*0.05)*0.5;
+		particle.posY += Math.sin(progress*0.05)*0.5;
+		particle.rotation += 10;
 
 		// render it
 		particle.render(context);
@@ -99,7 +106,6 @@ function draw() {
 }
 
 function makeParticle(particleCount) {
-
 	for(var i=0; i<particleCount;i++) {
 
 		// create a new particle in the middle of the stage
@@ -107,13 +113,13 @@ function makeParticle(particleCount) {
 
 		particle.velX = random(-0.25,0.25);
 		particle.velY = 0;
-		particle.size = random(0.1,0.2);
+		particle.size = random(0.12,0.22);
 		particle.maxSize = 100;
-		particle.alpha = random(0.1,0.3);
-		particle.gravity = -0.15;
-		particle.drag = 0.97;
+		particle.alpha = random(0.01,0.18);
+		particle.gravity = -0.18;
+		particle.drag = 0.96;
 		particle.shrink = random(1.01,1.02);
-		particle.fade = 0.002;
+		particle.fade = 0.0025;
 
 		particle.rotation = random(0,360);
 		particle.spin = random(-2,2);
